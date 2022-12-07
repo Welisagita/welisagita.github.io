@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Weli Sagita</title>
+        <style>
+            /* App Shell CSS */
+            :root {
+                --gray: #ececec;
+                --whitesmoke: #f5f5f5;
+                --dark: #222;
+            }
+            body {
+                margin: 0;
+                background-color: var(--whitesmoke);
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 
+                Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            }
+            #navbar {
+                height: 70px;
+                background-color: white;
+                box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--dark);
+                font-size: 22px;
+                font-weight: 600;
+            }
+            #screens {
+                display: flex;
+                width: 100vw;
+                overflow-x: scroll;
+                scroll-snap-type: x mandatory;
+            }
+            .screen {
+                flex: 0 0 100vw;
+                min-height: calc(100vh - 70px);
+                scroll-snap-align: start;
+            }
+            /* Loader - spinner */
+            .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+            }
+            .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid #fff;
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #fff transparent transparent transparent;
+            }
+            .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+            }
+            .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+            }
+            .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+            }
+            @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+            }
+        </style>
+    </head>
+    <body>
+        <!--App Shell HTML-->
+        <nav id="navbar">Hello</nav>
+
+        <main id="screens">
+            <div id="screen-flights" class="screen">
+                <!--Loader Spinner-->
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div><h1>Coming Soon</h1></div>
+            <div id="screen-rewards" class="screen">
+                <!--Loader Spinner-->
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </main>
+        <script>
+            //Debounce Script
+            function debounce(func, wait, immediate) {
+                var timeout;
+                return function() {
+                    var context = this, args = arguments;
+                    var later = function() {
+                        timeout = null;
+                        if (!immediate) func.apply(context, args);
+                    };
+                    var callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func.apply(context, args);
+                };
+            };
+            //Screen Scroll Script
+            const screens = document.querySelector("#screens");
+            const navbar= document.querySelector("#navbar")
+
+            const pageNames= ["Hello", "Myworks"];
+
+            const pageTransition = debounce(() => {
+                const index = Math.round(screens.scrollLeft / window.innerWidth);
+                navbar.textContent = pageNames[index]; 
+            }, 60);
+            screens.addEventListener("scroll", pageTransition);
+        </script>
+    </body>
+</html>
 
