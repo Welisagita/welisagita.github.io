@@ -1,8 +1,8 @@
 /**
 * Template Name: MyResume - v4.10.0
-* Template URL: https://bootstrapmade.com/free-html-bootstrap-template-my-resume/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
+* Template URL: https://welisagita.github.io
+* Author: Weli Sagita
+* License: Free
 */
 (function() {
   "use strict";
@@ -266,4 +266,7 @@
    */
   new PureCounter();
 
+  
+
 })()
+
