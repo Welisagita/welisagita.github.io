@@ -27,10 +27,13 @@
   a {
     text-decoration: none;
     font-size: 22px;
-    padding: 5px;
+    padding:5px;
     color: black;
   }
   
+  .contactme {
+    padding: 0;
+  }
   button:hover, a:hover {
     opacity: 0.7;
   }
