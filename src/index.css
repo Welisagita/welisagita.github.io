@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/* Memberikan warna latar belakang gelap khas tema AI/Futuristik */
+:root {
+  --color-ai-bg: #0f172a;
+}
+
+body {
+  background-color: var(--color-ai-bg); 
+  color: #f8fafc;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Efek Latar Belakang Jaring (Blueprint/Cyber Grid) */
+.bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Efek Kaca Buram (Glassmorphism) untuk Kartu & Sidebar */
+.glass-panel {
+  background: rgba(17, 28, 51, 0.4); /* Transparan */
+  backdrop-filter: blur(12px); /* Efek Blur */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(34, 211, 238, 0.1); /* Border tipis neon */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Animasi cahaya yang bernapas perlahan */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+.animate-glow {
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+/* Sembunyikan scrollbar untuk area chat tapi tetap bisa di-scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
