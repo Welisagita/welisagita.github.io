@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import { BrainCircuit, Code2, Database, Cloud, ShieldCheck, MessageCircle, Mail, User, UserPlus, Briefcase, Cpu } from "lucide-react";
+import { BrainCircuit, Code2, Database, Cloud, ShieldCheck, MessageCircle, Mail, User, UserPlus, Briefcase, Cpu, Terminal } from "lucide-react";
 
 export default function Hero() {
   
   // Fungsi untuk men-download kontak (vCard)
   const handleSaveContact = () => {
-    // Data VCF standar internasional
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 N:Sagita;Weli;;;
@@ -15,7 +14,6 @@ TEL;TYPE=CELL:+628119207940
 EMAIL:welipalumbo@gmail.com
 END:VCARD`;
 
-    // Proses membuat file dan memicu download otomatis
     const blob = new Blob([vcard], { type: "text/vcard" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -81,7 +79,7 @@ END:VCARD`;
             <img 
               src="/foto-weli.jpg" 
               alt="Weli Sagita" 
-              className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity z-10"
+              className="w-full h-full object-cover object-top grayscale opacity-90 group-hover:opacity-100 transition-opacity z-10"
               onError={(e) => { e.target.style.display = 'none'; }} 
             />
             <User size={64} className="text-slate-600 absolute" />
@@ -100,6 +98,15 @@ END:VCARD`;
           </h2>
           
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center md:justify-start w-full">
+            
+            {/* Tombol AI Chat (Baru) */}
+            <Link 
+              to="/ai-chat" 
+              className="px-6 py-2.5 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded hover:bg-indigo-500 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.2)] flex items-center justify-center gap-2"
+            >
+              <Terminal size={18} /> Chat AI
+            </Link>
+
             <a 
               href="https://wa.me/628119207940" 
               target="_blank" 
@@ -118,7 +125,6 @@ END:VCARD`;
               <Mail size={18} /> Email
             </a>
             
-            {/* Tombol Diganti menjadi Save Contact */}
             <button 
               onClick={handleSaveContact}
               className="px-6 py-2.5 glass-panel text-white rounded hover:bg-slate-800/50 transition-all border border-slate-700/50 hover:border-cyan-500/50 flex items-center justify-center gap-2"
@@ -203,7 +209,6 @@ END:VCARD`;
           ========================================= */}
       <div className="mt-20 w-full max-w-5xl flex flex-col items-end">
         <div className="flex flex-col sm:flex-row gap-6 w-full justify-end">
-          {/* Tombol Experience (Desain Elegan Secondary) */}
           <Link 
             to="/experience" 
             className="px-8 py-4 bg-slate-800/50 border border-cyan-500/30 text-slate-200 rounded-lg hover:bg-cyan-900/30 hover:border-cyan-400 hover:text-cyan-300 transition-all font-semibold shadow-lg flex items-center justify-center gap-3 w-full sm:w-auto group"
@@ -212,7 +217,6 @@ END:VCARD`;
             Professional Experience 
           </Link>
           
-          {/* Tombol Architectures (Desain Menyala Primary) */}
           <Link 
             to="/projects" 
             className="px-8 py-4 bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center justify-center gap-3 w-full sm:w-auto"

@@ -44,7 +44,7 @@ export default function Sidebar() {
                   key={item.path} 
                   to={item.path} 
                   onClick={closeMenu}
-                  className={`flex items-center gap-4 text-xl font-mono transition-colors w-full justify-center px-4 py-3 ${isActive ? "text-cyan-400 bg-cyan-900/20 border-l-4 border-cyan-400" : "text-slate-400 hover:text-cyan-300"}`}
+                  className={`flex items-center gap-4 text-xl font-mono transition-colors w-full text-start px-7 py-3 ${isActive ? "text-cyan-400 bg-cyan-900/20 border-l-4 border-cyan-400" : "text-slate-400 hover:text-cyan-300"}`}
                 >
                   {item.icon}
                   {item.label}
