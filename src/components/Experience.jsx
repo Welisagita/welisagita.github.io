@@ -171,11 +171,12 @@ export default function Experience() {
                   <span className="text-cyan-500 text-sm md:text-base font-medium">@ {item.company}</span>
                 </div>
                 
-                <div className="flex items-center gap-4 mt-3 md:mt-0">
+                {/* PERBAIKAN: Layout diubah agar di HP saling berjauhan (justify-between) dan icon tidak disembunyikan */}
+                <div className="flex items-center justify-between w-full md:w-auto mt-3 md:mt-0 md:gap-4">
                   <span className="text-slate-400 text-sm font-mono bg-slate-900/60 px-3 py-1 rounded-full border border-slate-700/50">
                     {item.year}
                   </span>
-                  <span className="text-cyan-400 font-mono hidden md:inline-block text-lg w-6 text-center">
+                  <span className="text-cyan-400 font-mono text-lg w-6 text-center">
                     {openIndex === index ? "[-]" : "[+]"}
                   </span>
                 </div>
