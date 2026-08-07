@@ -1,15 +1,38 @@
 import { Link } from "react-router-dom";
-import { BrainCircuit, Code2, Database, Cloud, ShieldCheck, ChevronRight } from "lucide-react";
+import { BrainCircuit, Code2, Database, Cloud, ShieldCheck, MessageCircle, Mail, User, UserPlus, Briefcase, Cpu } from "lucide-react";
 
 export default function Hero() {
   
-  // Data Tech Stack Matrix Anda
+  // Fungsi untuk men-download kontak (vCard)
+  const handleSaveContact = () => {
+    // Data VCF standar internasional
+    const vcard = `BEGIN:VCARD
+VERSION:3.0
+N:Sagita;Weli;;;
+FN:Weli Sagita
+TITLE:AI System Architect & Full-Stack Engineer
+TEL;TYPE=CELL:+628119207940
+EMAIL:welipalumbo@gmail.com
+END:VCARD`;
+
+    // Proses membuat file dan memicu download otomatis
+    const blob = new Blob([vcard], { type: "text/vcard" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Weli_Sagita.vcf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const techStack = [
     {
       id: "ai",
       title: "AI Systems & Automation",
       icon: <BrainCircuit className="text-cyan-400 animate-pulse" size={32} />,
-      highlight: true, // Kartu ini akan mendapat efek visual spesial
+      highlight: true, 
       desc: "Architecting autonomous agents and cognitive pipelines.",
       techs: ["RAG", "MCP", "LangGraph", "LiteLLM", "Agentic Workflow"]
     },
@@ -44,48 +67,101 @@ export default function Hero() {
   ];
 
   return (
-    <section id="home" className="flex flex-col items-center justify-start min-h-screen text-center px-4 md:px-16 w-full max-w-6xl mx-auto pb-20">
+    <section id="home" className="flex flex-col items-center justify-start min-h-screen px-4 md:px-16 w-full max-w-6xl mx-auto pb-24 pt-10 md:pt-16">
       
-      {/* --- HERO SECTION (Bagian Atas) --- */}
-      <div className="flex flex-col items-center justify-center pt-10 md:pt-20">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-3 md:mb-4 tracking-tight">
-          Weli Sagita
-        </h1>
+      {/* =========================================
+          SECTION 1: THE NAME CARD 
+          ========================================= */}
+      <div className="glass-panel w-full max-w-5xl mx-auto rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 border border-cyan-500/30 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative overflow-hidden group">
         
-        <h2 className="text-xs md:text-lg lg:text-xl text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] mb-8 md:mb-10">
-          &gt; AI SYSTEM ARCHITECT & FULL-STACK ENGINEER_
-        </h2>
-        
-        <p className="text-slate-300 max-w-4xl text-sm md:text-base lg:text-lg leading-relaxed text-justify md:text-center">
-          Innovative <strong>Full-Stack Software Engineer</strong> with over 7 years of experience bridging robust backend infrastructure with highly responsive frontend architectures. Specializing in building scalable web applications, API integrations, and <strong>autonomous AI workflows</strong>. Highly proficient in modern AI-assisted coding paradigms (utilizing tools like <span className="text-cyan-300 font-semibold">Claude</span> and <span className="text-cyan-300 font-semibold">Copilot</span>) to rapidly prototype and deploy complex systems. I am eager to leverage my expertise as a versatile generalist to build data pipelines, internal dashboards, and user-facing tools that accelerate machine learning research and product development.
-        </p>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none group-hover:bg-cyan-500/20 transition-all duration-700"></div>
 
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <a href="mailto:welipalumbo@gmail.com" className="w-full sm:w-auto px-8 py-3 bg-cyan-500/10 border border-cyan-400 text-cyan-400 rounded hover:bg-cyan-400 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(34,211,238,0.3)] flex items-center justify-center gap-2">
-            Initiate Contact <ChevronRight size={18} />
-          </a>
-          <Link to="/projects" className="w-full sm:w-auto px-8 py-3 glass-panel text-white rounded hover:bg-slate-800/50 transition-all border border-slate-700/50 hover:border-cyan-500/50 flex items-center justify-center gap-2">
-            View Architectures
-          </Link>
+        <div className="relative shrink-0 mt-2 md:mt-0">
+          <div className="w-44 h-44 md:w-56 md:h-56 rounded-2xl overflow-hidden border border-slate-600 group-hover:border-cyan-400/80 transition-colors duration-500 relative z-10 bg-slate-800 flex items-center justify-center shadow-xl">
+            <img 
+              src="/foto-weli.jpg" 
+              alt="Weli Sagita" 
+              className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity z-10"
+              onError={(e) => { e.target.style.display = 'none'; }} 
+            />
+            <User size={64} className="text-slate-600 absolute" />
+          </div>
+          
+          <div className="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-cyan-500/50 rounded-br-2xl pointer-events-none"></div>
+          <div className="absolute -top-3 -left-3 w-10 h-10 border-t-2 border-l-2 border-cyan-500/50 rounded-tl-2xl pointer-events-none"></div>
+        </div>
+
+        <div className="flex flex-col items-center md:items-start text-center md:text-left z-10">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-2">
+            Weli Sagita
+          </h1>
+          <h2 className="text-sm md:text-base text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] mb-8">
+            &gt; AI SYSTEM ARCHITECT_
+          </h2>
+          
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center md:justify-start w-full">
+            <a 
+              href="https://wa.me/628119207940" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/50 text-emerald-400 rounded hover:bg-emerald-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2"
+            >
+              <MessageCircle size={18} /> WhatsApp
+            </a>
+
+            <a 
+              href="mailto:welipalumbo@gmail.com" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-2.5 bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-400 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(34,211,238,0.2)] flex items-center justify-center gap-2"
+            >
+              <Mail size={18} /> Email
+            </a>
+            
+            {/* Tombol Diganti menjadi Save Contact */}
+            <button 
+              onClick={handleSaveContact}
+              className="px-6 py-2.5 glass-panel text-white rounded hover:bg-slate-800/50 transition-all border border-slate-700/50 hover:border-cyan-500/50 flex items-center justify-center gap-2"
+            >
+              <UserPlus size={18} /> Save Contact
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* --- TECH STACK MATRIX SECTION (Bagian Bawah) --- */}
-      <div className="mt-24 w-full flex flex-col items-center">
-        <div className="mb-10 border-b border-cyan-900/50 pb-4 w-full max-w-4xl text-left">
+      {/* =========================================
+          SECTION 2: EXECUTIVE SUMMARY 
+          ========================================= */}
+      <div className="mt-20 w-full flex flex-col items-center">
+        <div className="w-full max-w-5xl text-left mb-6 border-b border-cyan-900/50 pb-4">
+          <h3 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
+            <span className="text-cyan-400 font-mono text-xl drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">///</span> 
+            Executive Summary
+          </h3>
+        </div>
+        
+        <div className="glass-panel w-full max-w-5xl p-6 md:p-8 rounded-xl border border-slate-700/50 shadow-lg">
+          <p className="text-slate-300 text-sm md:text-base lg:text-lg leading-relaxed text-justify">
+            Innovative <strong>Full-Stack Software Engineer</strong> with over 7 years of experience bridging robust backend infrastructure with highly responsive frontend architectures. Specializing in building scalable web applications, API integrations, and <strong>autonomous AI workflows</strong>. Highly proficient in modern AI-assisted coding paradigms (utilizing tools like <span className="text-cyan-300 font-semibold">Claude</span> and <span className="text-cyan-300 font-semibold">Copilot</span>) to rapidly prototype and deploy complex systems. I am eager to leverage my expertise as a versatile generalist to build data pipelines, internal dashboards, and user-facing tools that accelerate machine learning research and product development.
+          </p>
+        </div>
+      </div>
+
+      {/* =========================================
+          SECTION 3: TECH STACK MATRIX
+          ========================================= */}
+      <div className="mt-20 w-full flex flex-col items-center">
+        <div className="mb-10 border-b border-cyan-900/50 pb-4 w-full max-w-5xl text-left">
           <h3 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
             <span className="text-cyan-400 font-mono text-xl drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">///</span> 
             Engineering Matrix
           </h3>
         </div>
 
-        {/* Grid Container */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
-          
           {techStack.map((stack) => (
             <div 
               key={stack.id} 
-              // Jika ini AI (highlight), buat kotaknya membentang 2 kolom di tablet/desktop dan berikan border nyala
               className={`glass-panel p-6 rounded-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start text-left border ${
                 stack.highlight 
                   ? "md:col-span-2 border-cyan-500/50 shadow-[0_0_20px_rgba(34,211,238,0.15)] bg-cyan-950/10" 
@@ -100,11 +176,9 @@ export default function Hero() {
                   {stack.title}
                 </h4>
               </div>
-              
               <p className="text-slate-400 text-sm mb-5 font-mono">
                 {stack.desc}
               </p>
-              
               <div className="flex flex-wrap gap-2 mt-auto">
                 {stack.techs.map((t, i) => (
                   <span 
@@ -121,7 +195,31 @@ export default function Hero() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
 
+      {/* =========================================
+          SECTION 4: CALL TO ACTION (Bottom Navigation)
+          ========================================= */}
+      <div className="mt-20 w-full max-w-5xl flex flex-col items-end">
+        <div className="flex flex-col sm:flex-row gap-6 w-full justify-end">
+          {/* Tombol Experience (Desain Elegan Secondary) */}
+          <Link 
+            to="/experience" 
+            className="px-8 py-4 bg-slate-800/50 border border-cyan-500/30 text-slate-200 rounded-lg hover:bg-cyan-900/30 hover:border-cyan-400 hover:text-cyan-300 transition-all font-semibold shadow-lg flex items-center justify-center gap-3 w-full sm:w-auto group"
+          >
+            <Briefcase size={20} className="group-hover:text-cyan-400 transition-colors" /> 
+            Professional Experience 
+          </Link>
+          
+          {/* Tombol Architectures (Desain Menyala Primary) */}
+          <Link 
+            to="/projects" 
+            className="px-8 py-4 bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center justify-center gap-3 w-full sm:w-auto"
+          >
+            <Cpu size={20} /> 
+            View Architectures
+          </Link>
         </div>
       </div>
 
