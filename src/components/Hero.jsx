@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { BrainCircuit, Code2, Database, Cloud, ShieldCheck, MessageCircle, Mail, User, UserPlus, Briefcase, Cpu, Terminal } from "lucide-react";
+// MENGGUNAKAN REACT-ICONS (Sangat stabil dan anti-error)
+import { FaLinkedin, FaGithub } from "react-icons/fa";
 
 export default function Hero() {
   
-  // Fungsi untuk men-download kontak (vCard)
   const handleSaveContact = () => {
     const vcard = `BEGIN:VCARD
 VERSION:3.0
@@ -99,19 +100,38 @@ END:VCARD`;
           
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center md:justify-start w-full">
             
-            {/* Tombol AI Chat (Baru) */}
             <Link 
               to="/ai-chat" 
-              className="px-6 py-2.5 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded hover:bg-indigo-500 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.2)] flex items-center justify-center gap-2"
+              className="px-4 py-2.5 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded hover:bg-indigo-500 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.2)] flex items-center justify-center gap-2"
             >
               <Terminal size={18} /> Chat AI
             </Link>
+
+            {/* Tombol LinkedIn (Diambil dari react-icons/fa) */}
+            <a 
+              href="https://www.linkedin.com/in/weli-sagita/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-4 py-2.5 bg-blue-500/10 border border-blue-500/50 text-blue-400 rounded hover:bg-blue-600 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(59,130,246,0.2)] flex items-center justify-center gap-2"
+            >
+              <FaLinkedin size={18} /> LinkedIn
+            </a>
+
+            {/* Tombol GitHub (Diambil dari react-icons/fa) */}
+            <a 
+              href="https://github.com/Welisagita" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-4 py-2.5 bg-slate-700/50 border border-slate-500/50 text-slate-200 rounded hover:bg-slate-600 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(100,116,139,0.2)] flex items-center justify-center gap-2"
+            >
+              <FaGithub size={18} /> GitHub
+            </a>
 
             <a 
               href="https://wa.me/628119207940" 
               target="_blank" 
               rel="noreferrer" 
-              className="px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/50 text-emerald-400 rounded hover:bg-emerald-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2"
+              className="px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/50 text-emerald-400 rounded hover:bg-emerald-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2"
             >
               <MessageCircle size={18} /> WhatsApp
             </a>
@@ -120,14 +140,14 @@ END:VCARD`;
               href="mailto:welipalumbo@gmail.com" 
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-2.5 bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-400 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(34,211,238,0.2)] flex items-center justify-center gap-2"
+              className="px-4 py-2.5 bg-cyan-500/10 border border-cyan-500/50 text-cyan-400 rounded hover:bg-cyan-400 hover:text-slate-900 transition-all font-semibold shadow-[0_0_15px_rgba(34,211,238,0.2)] flex items-center justify-center gap-2"
             >
               <Mail size={18} /> Email
             </a>
             
             <button 
               onClick={handleSaveContact}
-              className="px-6 py-2.5 glass-panel text-white rounded hover:bg-slate-800/50 transition-all border border-slate-700/50 hover:border-cyan-500/50 flex items-center justify-center gap-2"
+              className="px-4 py-2.5 glass-panel text-white rounded hover:bg-slate-800/50 transition-all border border-slate-700/50 hover:border-cyan-500/50 flex items-center justify-center gap-2"
             >
               <UserPlus size={18} /> Save Contact
             </button>
@@ -209,6 +229,12 @@ END:VCARD`;
           ========================================= */}
       <div className="mt-20 w-full max-w-5xl flex flex-col items-end">
         <div className="flex flex-col sm:flex-row gap-6 w-full justify-end">
+          <Link 
+              to="/ai-chat" 
+              className="px-4 py-2.5 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded hover:bg-indigo-500 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.2)] flex items-center justify-center gap-2"
+            >
+              <Terminal size={18} /> Chat AI
+            </Link>
           <Link 
             to="/experience" 
             className="px-8 py-4 bg-slate-800/50 border border-cyan-500/30 text-slate-200 rounded-lg hover:bg-cyan-900/30 hover:border-cyan-400 hover:text-cyan-300 transition-all font-semibold shadow-lg flex items-center justify-center gap-3 w-full sm:w-auto group"
