@@ -308,7 +308,11 @@ export default function AdminPanel() {
                         <span className="bg-slate-900 px-3 py-1 rounded-full text-xs border border-slate-700 text-cyan-400 font-mono">{p.tabs?.length || 0} Tabs</span>
                       </td>
                       <td className="p-4 flex justify-end gap-3 items-center">
-                        <button onClick={() => setContentProject(p)} className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded border border-indigo-500/50 transition-colors text-sm font-semibold"><Layers size={16} /> Content</button>
+                        <button onClick={() => { 
+                                setContentProject(p); 
+                                // Otomatis memilih tab pertama saat project dibuka
+                                setActiveContentSection(p.tabs?.[0]?.id || ""); 
+                                }} className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white rounded border border-indigo-500/50 transition-colors text-sm font-semibold"><Layers size={16} /> Content</button>
                         <button onClick={() => { setModalMode("edit"); setFormData(p); setIsModalOpen(true); }} className="p-2 text-slate-400 hover:text-cyan-400 rounded transition-colors"><Edit size={18} /></button>
                         <button onClick={() => handleDeleteProject(p.id, p.title)} className="p-2 text-slate-400 hover:text-red-400 rounded transition-colors"><Trash2 size={18} /></button>
                       </td>
@@ -369,9 +373,13 @@ export default function AdminPanel() {
               <div className="flex items-center justify-between mb-6 border-b border-slate-700/50 pb-4">
                 <h3 className="text-xl font-bold text-white">2. Inject Data to Array</h3>
                 <select value={activeContentSection} onChange={(e) => setActiveContentSection(e.target.value)} className="bg-slate-800 border border-slate-600 text-white text-sm rounded px-3 py-2 outline-none focus:border-cyan-500 font-mono">
-                  <option value="blueprint">Array: blueprint</option>
-                  <option value="architecture">Array: architecture</option>
-                  <option value="agents">Array: agents</option>
+                    {(contentProject.tabs || []).length === 0 ? (
+                        <option value="">-- Buat Tab Dulu --</option>
+                    ) : (
+                        contentProject.tabs.map(tab => (
+                        <option key={tab.id} value={tab.id}>Array: {tab.id}</option>
+                        ))
+                    )}
                 </select>
               </div>
 

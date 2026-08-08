@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Tambahan untuk navigasi
-import { Terminal, ExternalLink, DatabaseBackup, Loader2, Home, Briefcase } from "lucide-react"; // Tambahan ikon Home & Briefcase
+import { Link } from "react-router-dom"; 
+import { Terminal, ExternalLink, DatabaseBackup, Loader2, Home, Briefcase } from "lucide-react"; 
 import { db } from "../firebase"; 
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 
 export default function Projects() {
   const [activeTabs, setActiveTabs] = useState({});
-  const [projectsData, setProjectsData] = useState([]); // State sekarang kosong, menunggu dari Firebase
+  const [projectsData, setProjectsData] = useState([]); 
   const [isLoading, setIsLoading] = useState(true);
 
   const toggleTab = (projectId, tabId) => {
@@ -82,11 +82,10 @@ export default function Projects() {
     try {
       setIsLoading(true);
       for (const project of localProjectsData) {
-        // Menggunakan setDoc agar ID dokumen sama dengan ID project (sqrf, alcorprime)
         await setDoc(doc(db, "projects", project.id), project);
       }
       alert("✅ Data Berhasil Dimigrasi ke Firebase!");
-      window.location.reload(); // Refresh halaman untuk melihat data baru
+      window.location.reload(); 
     } catch (error) {
       console.error("Migration failed:", error);
       alert("❌ Migrasi Gagal! Periksa aturan akses (rules) Firestore Anda.");
@@ -105,7 +104,6 @@ export default function Projects() {
           <p className="text-slate-400 font-mono text-sm mt-1">&gt; Production-grade systems & cognitive pipelines_</p>
         </div>
 
-        {/* TOMBOL MIGRASI RAHASIA (Nanti kita hapus setelah berhasil) */}
         {projectsData.length === 0 && !isLoading && (
           <button 
             onClick={handleMigrateData}
@@ -116,7 +114,6 @@ export default function Projects() {
         )}
       </div>
 
-      {/* TAMPILAN LOADING */}
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-cyan-400 gap-4">
           <Loader2 size={48} className="animate-spin" />
@@ -124,7 +121,6 @@ export default function Projects() {
         </div>
       )}
 
-      {/* TAMPILAN KOSONG */}
       {!isLoading && projectsData.length === 0 && (
         <div className="glass-panel p-10 text-center rounded-2xl border border-red-500/30">
           <p className="text-red-400 font-mono text-lg">⚠️ NO DATA FOUND IN FIREBASE.</p>
@@ -132,11 +128,14 @@ export default function Projects() {
         </div>
       )}
 
-      {/* TAMPILAN DATA PROYEK */}
       {!isLoading && projectsData.length > 0 && (
         <div className="space-y-24">
           {projectsData.map((project) => {
-            const currentTab = activeTabs[project.id] || project.tabs[0].id;
+            // MENENTUKAN TAB YANG SEDANG AKTIF SAAT INI
+            const currentTab = activeTabs[project.id] || (project.tabs && project.tabs.length > 0 ? project.tabs[0].id : "");
+            
+            // MENGAMBIL DATA ARRAY BERDASARKAN ID TAB YANG AKTIF (DINAMIS)
+            const currentData = currentTab ? (project[currentTab] || []) : [];
 
             return (
               <div key={project.id} className="relative glass-panel p-6 md:p-10 rounded-2xl border border-slate-700/50">
@@ -178,27 +177,14 @@ export default function Projects() {
                   </div>
                 )}
 
-                {(currentTab === "blueprint" || currentTab === "architecture") && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-[fadeIn_0.5s_ease-in-out]">
-                    {(project.blueprint || project.architecture)?.map((item, index) => (
-                      <div key={index} className="bg-slate-900/40 border border-slate-700/40 p-6 rounded-lg hover:border-cyan-500/50 transition-all duration-300 group hover:-translate-y-1">
-                        <h5 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h5>
-                        <p className="text-slate-400 mb-4 text-sm leading-relaxed">{item.desc}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {item.tech?.map((t, i) => (
-                            <span key={i} className="px-2.5 py-1 bg-slate-800 text-cyan-300 text-xs font-mono rounded border border-slate-700">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {currentTab === "agents" && (
+                {/* AREA RENDER KONTEN DINAMIS */}
+                {currentData.length === 0 ? (
+                  <div className="text-slate-500 font-mono text-sm italic py-4">Menunggu data diunggah ke struktur ini...</div>
+                ) : currentTab === "agents" ? (
+                  
+                  // LAYOUT KHUSUS UNTUK ARRAY 'AGENTS'
                   <div className="flex flex-col space-y-6 animate-[fadeIn_0.5s_ease-in-out]">
-                    {project.agents?.map((agent, index) => (
+                    {currentData.map((agent, index) => (
                       <div key={index} className="bg-slate-900/40 border border-slate-700/40 border-l-4 border-l-cyan-500 p-6 rounded-r-lg relative overflow-hidden group hover:border-cyan-400/50 transition-all">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div> 
                         
@@ -216,6 +202,27 @@ export default function Projects() {
                       </div>
                     ))}
                   </div>
+
+                ) : (
+                  
+                  // LAYOUT STANDAR UNTUK ARRAY LAINNYA (BLUEPRINT, ARCHITECTURE, DLL)
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-[fadeIn_0.5s_ease-in-out]">
+                    {currentData.map((item, index) => (
+                      <div key={index} className="bg-slate-900/40 border border-slate-700/40 p-6 rounded-lg hover:border-cyan-500/50 transition-all duration-300 group hover:-translate-y-1">
+                        <h5 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h5>
+                        <p className="text-slate-400 mb-4 text-sm leading-relaxed">{item.desc}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {/* Memastikan tech dirender dengan aman terlepas dari apakah itu array atau belum ada isinya */}
+                          {Array.isArray(item.tech) && item.tech.map((t, i) => (
+                            <span key={i} className="px-2.5 py-1 bg-slate-800 text-cyan-300 text-xs font-mono rounded border border-slate-700">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 )}
 
               </div>
@@ -224,19 +231,15 @@ export default function Projects() {
         </div>
       )}
 
-      {/* =========================================
-          BOTTOM NAVIGATION (Tambahan Baru)
-          ========================================= */}
+      {/* BOTTOM NAVIGATION */}
       {!isLoading && projectsData.length > 0 && (
         <div className="mt-20 border-t border-cyan-900/50 pt-10 flex flex-col sm:flex-row gap-6 w-full justify-end">
-          {/* Tombol lanjut ke Chat AI */}
           <Link 
               to="/ai-chat" 
               className="px-4 py-2.5 bg-indigo-500/10 border border-indigo-500/50 text-indigo-400 rounded hover:bg-indigo-500 hover:text-white transition-all font-semibold shadow-[0_0_15px_rgba(99,102,241,0.2)] flex items-center justify-center gap-2"
             >
               <Terminal size={18} /> Chat AI
             </Link>
-          {/* Tombol kembali ke Profile (Hero) */}
           <Link 
             to="/" 
             className="px-8 py-4 bg-slate-800/50 border border-slate-600/50 text-slate-300 rounded-lg hover:bg-slate-700/50 hover:text-white transition-all font-semibold flex items-center justify-center gap-3 w-full sm:w-auto group"
@@ -245,7 +248,6 @@ export default function Projects() {
             Back to Profile
           </Link>
           
-          {/* Tombol lanjut ke Experience */}
           <Link 
             to="/experience" 
             className="px-8 py-4 bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center justify-center gap-3 w-full sm:w-auto"
