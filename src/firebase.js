@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 // TODO: Ganti nilai di dalam objek ini dengan firebaseConfig dari Dashboard Firebase Anda
 const firebaseConfig = {
@@ -13,6 +14,7 @@ const firebaseConfig = {
 
 // Inisialisasi Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app); // TAMBAHAN: Inisialisasi Auth
 
-// Inisialisasi layanan Firestore (Database)
-export const db = getFirestore(app);
+export { db, auth }; // Ekspor auth agar bisa dipakai di Admin Panel

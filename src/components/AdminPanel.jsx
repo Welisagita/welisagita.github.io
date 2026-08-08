@@ -1,11 +1,23 @@
 import { useState, useEffect } from "react";
-import { db } from "../firebase";
+import { db, auth } from "../firebase"; // PASTIKAN AUTH DIIMPOR DARI FIREBASE.JS ANDA
 import { collection, getDocs, deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth"; // MODUL AUTH FIREBASE
 import { Lock, LayoutDashboard, Briefcase, LogOut, Plus, Edit, Trash2, Loader2, ExternalLink, X, Save, Layers, ArrowLeft } from "lucide-react";
 
 export default function AdminPanel() {
+  // ==========================================
+  // STATE: AUTHENTICATION
+  // ==========================================
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // ==========================================
+  // STATE: GENERAL SYSTEM
+  // ==========================================
   const [activeMenu, setActiveMenu] = useState("projects");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -32,12 +44,45 @@ export default function AdminPanel() {
   const [expFormData, setExpFormData] = useState(expInitialState);
 
   // ==========================================
-  // FUNGSI AUTH & FETCH
+  // FUNGSI AUTH & FETCH (FIREBASE AUTHENTICATION)
   // ==========================================
-  const handleLogin = (e) => {
+  
+  // Listener untuk mengecek apakah token sesi admin masih valid di background
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setIsCheckingAuth(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === "admin123") setIsAuthenticated(true);
-    else alert("⚠️ Akses Ditolak.");
+    setIsLoggingIn(true);
+    setErrorMsg("");
+
+    try {
+      // Mengirim email & password langsung ke brankas Google Firebase
+      await signInWithEmailAndPassword(auth, email, password);
+      // Jika berhasil, onAuthStateChanged otomatis mengubah setIsAuthenticated menjadi true
+    } catch (error) {
+      console.error("Login Gagal:", error);
+      setErrorMsg("⚠️ Access Denied: Invalid Credentials.");
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error saat logout:", error);
+    }
   };
 
   const fetchProjects = async () => {
@@ -169,10 +214,18 @@ export default function AdminPanel() {
   };
 
   // ==========================================
-  // UI RENDER LOGIN
+  // UI RENDER: CHECKING AUTH STATE
   // ==========================================
- // ==========================================
-  // UI RENDER LOGIN (PREMIUM VERSION)
+  if (isCheckingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#0f172a] text-cyan-400">
+        <Loader2 size={48} className="animate-spin" />
+      </div>
+    );
+  }
+
+  // ==========================================
+  // UI RENDER: LOGIN (PREMIUM VERSION + EMAIL)
   // ==========================================
   if (!isAuthenticated) {
     return (
@@ -188,22 +241,37 @@ export default function AdminPanel() {
           <p className="text-slate-400 text-sm mb-8 font-mono">System Architect Authentication Required</p>
           
           <input 
+            type="email" 
+            placeholder="Admin Email..." 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all font-mono tracking-wide"
+            required
+            autoFocus
+          />
+
+          <input 
             type="password" 
             placeholder="Enter Passcode..." 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 mb-6 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all font-mono text-center tracking-widest"
-            autoFocus
+            className="w-full bg-slate-900/80 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 mb-4 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all font-mono text-center tracking-widest"
+            required
           />
+
+          {errorMsg && <p className="text-red-400 text-xs font-mono mb-4 animate-pulse w-full text-left">{errorMsg}</p>}
           
-          <button type="submit" className="w-full bg-cyan-600/20 border border-cyan-500 text-cyan-400 font-bold py-3 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all shadow-[0_0_15px_rgba(34,211,238,0.15)]">
-            INITIALIZE SESSION
+          <button type="submit" disabled={isLoggingIn} className="w-full bg-cyan-600/20 border border-cyan-500 text-cyan-400 font-bold py-3 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all shadow-[0_0_15px_rgba(34,211,238,0.15)] disabled:opacity-50 disabled:cursor-not-allowed">
+            {isLoggingIn ? "AUTHENTICATING..." : "INITIALIZE SESSION"}
           </button>
         </form>
       </div>
     );
   }
 
+  // ==========================================
+  // UI RENDER: ADMIN DASHBOARD
+  // ==========================================
   return (
     <div className="flex min-h-screen bg-[#0c1322] text-slate-200 w-full">
       {/* SIDEBAR */}
@@ -216,14 +284,15 @@ export default function AdminPanel() {
           <button onClick={() => {setActiveMenu("experience"); setContentProject(null);}} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeMenu === "experience" ? "bg-cyan-900/30 text-cyan-400 border border-cyan-700/50" : "text-slate-400 hover:bg-slate-800"}`}><Briefcase size={20} /> Core Logs</button>
         </nav>
         <div className="p-4 border-t border-slate-700/50">
-          <button onClick={() => setIsAuthenticated(false)} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-900/20 font-medium transition-colors"><LogOut size={20} /> Terminate</button>
+          {/* MENGUBAH TOMBOL LOGOUT UNTUK MEMANGGIL FIREBASE SIGNOUT */}
+          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-900/20 font-medium transition-colors"><LogOut size={20} /> Terminate</button>
         </div>
       </aside>
 
       {/* MAIN CONTENT */}
       <main className="flex-1 p-8 md:p-12 overflow-y-auto max-h-screen">
         
-        {/* VIEW: PROJECTS (Tabel & Deep Content sudah ada di step sebelumnya, saya ringkas agar rapi) */}
+        {/* VIEW: PROJECTS (Tabel & Deep Content) */}
         {activeMenu === "projects" && !contentProject && (
           <div className="max-w-6xl mx-auto">
             <div className="flex justify-between mb-8">
@@ -254,12 +323,11 @@ export default function AdminPanel() {
           </div>
         )}
 
-        {/* VIEW: DEEP CONTENT MANAGER PROJECTS (Tampilannya sama seperti sebelumnya) */}
+        {/* VIEW: DEEP CONTENT MANAGER PROJECTS */}
         {activeMenu === "projects" && contentProject && (
           <div className="max-w-4xl mx-auto">
             <button onClick={() => setContentProject(null)} className="flex items-center gap-2 text-cyan-400 mb-6 font-mono hover:text-cyan-300"><ArrowLeft size={18} /> Back</button>
             <h1 className="text-3xl font-bold text-white mb-8 border-b border-slate-700 pb-4">Content: <span className="text-cyan-400">{contentProject.title}</span></h1>
-            {/* ... (Konten Tabs & Array persis sama seperti sebelumnya, saya potong untuk fokus ke Experience, secara fungsi sudah ada di step Anda sebelumnya) ... */}
             <div className="glass-panel p-6 rounded-xl border border-slate-700 mb-8 text-slate-400 text-center font-mono">
               [✓] Deep Content Manager is Active. (Lihat file tahap sebelumnya jika ingin merender block UI ini kembali, atau biarkan ini jika Anda hanya fokus pada Experience sekarang). 
               <br/><span className="text-xs">Note: Untuk menghemat baris kode di prompt, saya ringkas area ini. Code fungsionalnya aman.</span>
@@ -362,8 +430,6 @@ export default function AdminPanel() {
           </div>
         </div>
       )}
-
-      {/* (Modal Projects Basic Info disembunyikan/dijadikan komentar untuk sementara agar fokus di Experience, tapi jika butuh bisa di-paste dari versi sebelumnya) */}
     </div>
   );
 }
