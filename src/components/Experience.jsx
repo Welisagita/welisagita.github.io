@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { DatabaseBackup, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom"; // Tambahan untuk navigasi
+import { DatabaseBackup, Loader2, Home, Cpu } from "lucide-react"; // Tambahan ikon navigasi
 import { db } from "../firebase";
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 
@@ -125,7 +126,7 @@ export default function Experience() {
       
       {/* HEADER SECTION */}
       <div className="mb-8 border-b border-cyan-900/50 pb-4 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+        <h3 className="text-3xl font-bold text-white flex items-center gap-3">
           Professional Experience
         </h3>
 
@@ -196,6 +197,32 @@ export default function Experience() {
           ))}
         </div>
       )}
+
+      {/* =========================================
+          BOTTOM NAVIGATION (Tambahan Baru)
+          ========================================= */}
+      {!isLoading && experiences.length > 0 && (
+        <div className="mt-16 border-t border-cyan-900/50 pt-10 flex flex-col sm:flex-row gap-6 w-full justify-end">
+          {/* Tombol kembali ke Profile (Hero) */}
+          <Link 
+            to="/" 
+            className="px-8 py-4 bg-slate-800/50 border border-slate-600/50 text-slate-300 rounded-lg hover:bg-slate-700/50 hover:text-white transition-all font-semibold flex items-center justify-center gap-3 w-full sm:w-auto group"
+          >
+            <Home size={20} className="text-slate-400 group-hover:text-white transition-colors" /> 
+            Back to Profile
+          </Link>
+          
+          {/* Tombol lanjut ke Projects/Architectures */}
+          <Link 
+            to="/projects" 
+            className="px-8 py-4 bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center justify-center gap-3 w-full sm:w-auto"
+          >
+            <Cpu size={20} /> 
+            View Architectures
+          </Link>
+        </div>
+      )}
+
     </section>
   );
 }

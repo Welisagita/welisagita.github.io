@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ExternalLink, DatabaseBackup, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom"; // Tambahan untuk navigasi
+import { ExternalLink, DatabaseBackup, Loader2, Home, Briefcase } from "lucide-react"; // Tambahan ikon Home & Briefcase
 import { db } from "../firebase"; 
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 
@@ -222,6 +223,32 @@ export default function Projects() {
           })}
         </div>
       )}
+
+      {/* =========================================
+          BOTTOM NAVIGATION (Tambahan Baru)
+          ========================================= */}
+      {!isLoading && projectsData.length > 0 && (
+        <div className="mt-20 border-t border-cyan-900/50 pt-10 flex flex-col sm:flex-row gap-6 w-full justify-end">
+          {/* Tombol kembali ke Profile (Hero) */}
+          <Link 
+            to="/" 
+            className="px-8 py-4 bg-slate-800/50 border border-slate-600/50 text-slate-300 rounded-lg hover:bg-slate-700/50 hover:text-white transition-all font-semibold flex items-center justify-center gap-3 w-full sm:w-auto group"
+          >
+            <Home size={20} className="text-slate-400 group-hover:text-white transition-colors" /> 
+            Back to Profile
+          </Link>
+          
+          {/* Tombol lanjut ke Experience */}
+          <Link 
+            to="/experience" 
+            className="px-8 py-4 bg-cyan-600/10 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500 hover:text-slate-900 transition-all font-semibold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center justify-center gap-3 w-full sm:w-auto"
+          >
+            <Briefcase size={20} /> 
+            View Experience
+          </Link>
+        </div>
+      )}
+
     </section>
   );
 }
