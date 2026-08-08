@@ -164,12 +164,14 @@ export default function Projects() {
                 </div>
 
                 {project.tabs && project.tabs.length > 0 && (
-                  <div className="flex flex-wrap gap-4 mb-8 border-b border-slate-700/50 pb-px">
+                  // PERBAIKAN: flex-wrap dihapus, ditambah overflow-x-auto dan scrollbar hidden
+                  <div className="flex overflow-x-auto gap-4 mb-8 border-b border-slate-700/50 pb-px [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] scrollbar-none">
                     {project.tabs.map(tab => (
                       <button 
                         key={tab.id}
                         onClick={() => toggleTab(project.id, tab.id)}
-                        className={`pb-3 px-2 text-sm md:text-base font-mono transition-all ${currentTab === tab.id ? "text-cyan-400 border-b-2 border-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" : "text-slate-500 hover:text-slate-300"}`}
+                        // PERBAIKAN: ditambah shrink-0 dan whitespace-nowrap agar teks tab tidak patah
+                        className={`shrink-0 whitespace-nowrap pb-3 px-2 text-sm md:text-base font-mono transition-all ${currentTab === tab.id ? "text-cyan-400 border-b-2 border-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" : "text-slate-500 hover:text-slate-300"}`}
                       >
                         {tab.label}
                       </button>
@@ -190,7 +192,7 @@ export default function Projects() {
                         
                         <div className="flex flex-col md:flex-row md:items-center justify-between mb-3 relative z-10">
                           <h5 className="text-2xl font-bold text-white tracking-wide">{agent.name}</h5>
-                          <span className="text-cyan-400 font-mono text-sm mt-1 md:mt-0 px-3 py-1 bg-cyan-900/30 rounded-full border border-cyan-800/50">
+                          <span className="text-cyan-400 font-mono text-sm mt-1 md:mt-0 px-3 py-1 bg-cyan-900/30 rounded-full border border-cyan-800/50 w-max">
                             {agent.role}
                           </span>
                         </div>
